@@ -1,0 +1,166 @@
+<div class="dashboard-container" id="dashboard-view">
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="scores.length === 0 && !analysis && !roadmap">
+    <div class="empty-icon animate-float">📊</div>
+    <h2 class="empty-title">No Data Yet</h2>
+    <p class="empty-text">
+      Complete the skill verification in the
+      <a routerLink="/">Chat</a> to see your verified skill scores,
+      gap analysis, and personalized career roadmap here.
+    </p>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard-content" *ngIf="scores.length > 0 || analysis || roadmap">
+    <h1 class="dashboard-title animate-fade-in">
+      <span class="gradient-text">{{ analysis?.target_career || 'Your' }}</span>
+      Skill Dashboard
+    </h1>
+
+    <!-- Score Overview Section -->
+    <div class="scores-grid" *ngIf="analysis || scores.length > 0">
+      <!-- Overall Score Gauge -->
+      <div class="overall-score-card glass-card animate-fade-in-up" *ngIf="analysis">
+        <h3 class="card-title">Overall Verified Score</h3>
+        <div class="gauge-container">
+          <svg viewBox="0 0 120 120" class="score-gauge">
+            <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(124,92,252,0.1)" stroke-width="8"/>
+            <circle
+              cx="60" cy="60" r="54" fill="none"
+              [attr.stroke]="overallScoreColor"
+              stroke-width="8"
+              stroke-linecap="round"
+              [attr.stroke-dasharray]="scoreCircumference"
+              [attr.stroke-dashoffset]="scoreDashoffset"
+              transform="rotate(-90 60 60)"
+              class="gauge-fill"
+            />
+          </svg>
+          <div class="gauge-label">
+            <span class="gauge-value" [style.color]="overallScoreColor">{{ overallScore }}</span>
+            <span class="gauge-unit">%</span>
+          </div>
+        </div>
+        <p class="score-summary" *ngIf="analysis.summary">{{ analysis.summary }}</p>
+      </div>
+
+      <!-- Strengths & Gaps -->
+      <div class="insights-card glass-card animate-fade-in-up delay-1" *ngIf="analysis">
+        <div class="insight-section" *ngIf="analysis.strengths.length > 0">
+          <h4 class="insight-title">
+            <span class="insight-icon">💪</span> Strengths
+          </h4>
+          <ul class="insight-list">
+            <li *ngFor="let s of analysis.strengths" class="insight-item strength">{{ s }}</li>
+          </ul>
+        </div>
+        <div class="insight-section" *ngIf="analysis.gaps.length > 0">
+          <h4 class="insight-title">
+            <span class="insight-icon">🎯</span> Priority Gaps
+          </h4>
+          <ul class="insight-list">
+            <li *ngFor="let g of analysis.gaps" class="insight-item gap">{{ g }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Per-Skill Scores -->
+    <div class="skill-scores-section" *ngIf="scores.length > 0">
+      <h3 class="section-title">Verified Skill Scores</h3>
+      <div class="skill-bars">
+        <div
+          *ngFor="let score of scores; let i = index"
+          class="skill-bar-item animate-fade-in-up"
+          [style.animation-delay]="(i * 0.1) + 's'"
+        >
+          <div class="skill-bar-header">
+            <span class="skill-name">{{ score.skill_name }}</span>
+            <span class="skill-score" [style.color]="getScoreColor(score)">
+              {{ score.verified_score }}/{{ score.max_score }}
+            </span>
+          </div>
+          <div class="progress-bar">
+            <div
+              class="progress-bar-fill"
+              [style.width.%]="getScoreWidth(score)"
+              [style.background]="'linear-gradient(90deg, ' + getScoreColor(score) + ', ' + getScoreColor(score) + '80)'"
+            ></div>
+          </div>
+          <p class="skill-feedback" *ngIf="score.feedback">{{ score.feedback }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Roadmap Timeline -->
+    <div class="roadmap-section" *ngIf="roadmap">
+      <h3 class="section-title">
+        Your Career Roadmap
+        <span class="roadmap-duration badge badge-primary">
+          {{ roadmap.total_duration_weeks }} weeks
+        </span>
+      </h3>
+      <p class="roadmap-summary" *ngIf="roadmap.summary">{{ roadmap.summary }}</p>
+
+      <div class="timeline">
+        <div
+          *ngFor="let phase of roadmap.phases; let i = index"
+          class="timeline-item animate-fade-in-up"
+          [style.animation-delay]="(i * 0.15) + 's'"
+          [class.expanded]="expandedPhase === phase.phase"
+        >
+          <div class="timeline-marker">
+            <div class="marker-dot"></div>
+            <div class="marker-line" *ngIf="i < roadmap.phases.length - 1"></div>
+          </div>
+
+          <div class="timeline-card glass-card" (click)="togglePhase(phase.phase)">
+            <div class="timeline-header">
+              <div class="phase-badge">Phase {{ phase.phase }}</div>
+              <h4 class="phase-title">{{ phase.title }}</h4>
+              <span class="phase-duration badge badge-success">
+                {{ phase.duration_weeks }} weeks
+              </span>
+            </div>
+
+            <p class="phase-description">{{ phase.description }}</p>
+
+            <!-- Expanded Content -->
+            <div class="phase-details" *ngIf="expandedPhase === phase.phase">
+              <div class="phase-skills" *ngIf="phase.skills_covered.length > 0">
+                <span class="detail-label">Skills:</span>
+                <span *ngFor="let skill of phase.skills_covered" class="skill-chip">{{ skill }}</span>
+              </div>
+
+              <div class="phase-resources" *ngIf="phase.resources.length > 0">
+                <span class="detail-label">Resources:</span>
+                <div class="resource-list">
+                  <a
+                    *ngFor="let res of phase.resources"
+                    [href]="res.url"
+                    target="_blank"
+                    rel="noopener"
+                    class="resource-link"
+                  >
+                    <span class="resource-icon">{{ getResourceIcon(res.type) }}</span>
+                    <span class="resource-title">{{ res.title }}</span>
+                    <span class="resource-badge" *ngIf="res.is_free">FREE</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="phase-milestone" *ngIf="phase.milestone">
+                <span class="detail-label">🏆 Milestone:</span>
+                <p>{{ phase.milestone }}</p>
+              </div>
+            </div>
+
+            <button class="expand-btn">
+              {{ expandedPhase === phase.phase ? '▲ Collapse' : '▼ View Details' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

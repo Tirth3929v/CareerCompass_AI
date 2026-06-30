@@ -1,0 +1,116 @@
+<div class="chat-container" id="chat-view">
+  <!-- Welcome Hero (shown when no messages) -->
+  <div class="chat-hero" *ngIf="messages.length === 0">
+    <div class="hero-icon animate-float">🧭</div>
+    <h1 class="hero-title">
+      Welcome to <span class="gradient-text">CareerCompass AI</span>
+    </h1>
+    <p class="hero-subtitle">
+      Your AI-powered career counselor. I'll verify your technical skills
+      through interactive challenges and build you a personalized roadmap
+      to your dream tech career.
+    </p>
+    <div class="hero-chips">
+      <button class="chip" (click)="currentMessage = 'I want to become an AI Engineer'; sendMessage()">
+        🤖 AI Engineer
+      </button>
+      <button class="chip" (click)="currentMessage = 'I want to become a Full-Stack Developer'; sendMessage()">
+        💻 Full-Stack Dev
+      </button>
+      <button class="chip" (click)="currentMessage = 'I want to become a Data Scientist'; sendMessage()">
+        📊 Data Scientist
+      </button>
+      <button class="chip" (click)="currentMessage = 'I want to become a Cloud Architect'; sendMessage()">
+        ☁️ Cloud Architect
+      </button>
+    </div>
+  </div>
+
+  <!-- Messages Area -->
+  <div class="messages-area" #messagesContainer *ngIf="messages.length > 0">
+    <div
+      *ngFor="let message of messages; trackBy: trackByMessageId"
+      class="message-wrapper"
+      [ngClass]="{
+        'message-user': message.role === 'user',
+        'message-assistant': message.role === 'assistant',
+        'message-system': message.role === 'system'
+      }"
+    >
+      <div class="message-bubble animate-fade-in-up">
+        <!-- Avatar -->
+        <div class="message-avatar">
+          <span *ngIf="message.role === 'user'">👤</span>
+          <span *ngIf="message.role === 'assistant'">🧭</span>
+          <span *ngIf="message.role === 'system'">⚠️</span>
+        </div>
+
+        <!-- Content -->
+        <div class="message-content">
+          <div class="message-header">
+            <span class="message-sender">
+              {{ message.role === 'user' ? 'You' : message.role === 'assistant' ? 'CareerCompass AI' : 'System' }}
+            </span>
+            <span class="message-time">
+              {{ message.timestamp | date:'shortTime' }}
+            </span>
+          </div>
+          <div class="message-text" [innerHTML]="message.content"></div>
+
+          <!-- Challenge Card Injection -->
+          <app-challenge-card
+            *ngIf="message.challengeData"
+            [challenge]="message.challengeData"
+            (submitAnswer)="onChallengeSubmit($event)"
+          ></app-challenge-card>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typing Indicator -->
+    <div class="message-wrapper message-assistant" *ngIf="isLoading">
+      <div class="message-bubble typing-indicator">
+        <div class="message-avatar"><span>🧭</span></div>
+        <div class="typing-dots">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input Area -->
+  <div class="input-area">
+    <div class="input-container glass-card">
+      <textarea
+        #messageInput
+        class="message-input"
+        [(ngModel)]="currentMessage"
+        (keydown)="onKeyDown($event)"
+        [placeholder]="currentMode === 'verification' ? 'Type your answer to the challenge...' : 'Tell me about your career goals...'"
+        [disabled]="isLoading"
+        rows="1"
+        id="chat-input"
+      ></textarea>
+      <button
+        class="send-btn btn-primary"
+        (click)="sendMessage()"
+        [disabled]="!currentMessage.trim() || isLoading"
+        id="send-button"
+      >
+        <svg *ngIf="!isLoading" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+        <div *ngIf="isLoading" class="spinner"></div>
+      </button>
+    </div>
+    <div class="input-footer">
+      <span class="footer-hint">Press Enter to send, Shift+Enter for new line</span>
+      <button class="btn-ghost" (click)="resetChat()" id="reset-button">
+        Reset Session
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: careercompass-ai-backend
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: GOOGLE_GENAI_API_KEY
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: https://your-app.vercel.app
+      - key: RATE_LIMIT_PER_DAY
+        value: "20"
+    healthCheckPath: /api/health

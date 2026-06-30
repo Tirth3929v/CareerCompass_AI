@@ -1,0 +1,163 @@
+.challenge-card {
+  margin-top: var(--space-lg);
+  padding: var(--space-xl);
+  border: 1px solid rgba(124, 92, 252, 0.25);
+  background: linear-gradient(145deg, rgba(124, 92, 252, 0.06) 0%, rgba(0, 212, 170, 0.03) 100%);
+}
+
+.challenge-card:hover {
+  transform: none;
+}
+
+/* Header */
+.challenge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.challenge-meta {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.challenge-type-badge {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--accent-primary-light);
+}
+
+.challenge-timer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.timer-warning {
+  color: var(--accent-danger) !important;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.difficulty-easy { background: rgba(0, 212, 170, 0.15); color: var(--accent-secondary); }
+.difficulty-intermediate { background: rgba(255, 179, 71, 0.15); color: var(--accent-warning); }
+.difficulty-hard { background: rgba(255, 107, 107, 0.15); color: var(--accent-danger); }
+
+/* Question */
+.challenge-question {
+  margin-bottom: var(--space-lg);
+  padding: var(--space-lg);
+  background: rgba(15, 10, 30, 0.4);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--accent-primary);
+}
+
+.challenge-question p {
+  font-size: var(--font-size-md);
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
+/* Input */
+.challenge-input {
+  margin-bottom: var(--space-lg);
+}
+
+.input-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.format-hint {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.math-input {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-lg);
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+/* MCQ Options */
+.challenge-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.option-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: rgba(15, 10, 30, 0.3);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-align: left;
+  width: 100%;
+}
+
+.option-btn:hover:not(:disabled) {
+  background: rgba(124, 92, 252, 0.08);
+  border-color: var(--accent-primary);
+}
+
+.option-btn.selected {
+  background: rgba(124, 92, 252, 0.15);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(124, 92, 252, 0.2);
+}
+
+.option-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.option-marker {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  color: var(--accent-primary-light);
+  flex-shrink: 0;
+}
+
+.option-btn.selected .option-marker {
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+}
+
+/* Actions */
+.challenge-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit-challenge-btn {
+  padding: var(--space-md) var(--space-2xl);
+  font-size: var(--font-size-md);
+}

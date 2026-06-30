@@ -1,0 +1,83 @@
+<div class="challenge-card glass-card animate-scale-in" id="challenge-card" *ngIf="challenge">
+  <!-- Header -->
+  <div class="challenge-header">
+    <div class="challenge-meta">
+      <span class="challenge-type-badge">{{ challengeTypeLabel }}</span>
+      <span class="challenge-skill badge badge-primary">{{ challenge.skill_being_tested }}</span>
+      <span class="challenge-difficulty badge" [ngClass]="difficultyClass">
+        {{ challenge.difficulty }}
+      </span>
+    </div>
+    <div class="challenge-timer" [class.timer-warning]="timeRemaining <= 60" *ngIf="timeRemaining > 0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+      <span>{{ formattedTime }}</span>
+    </div>
+  </div>
+
+  <!-- Question -->
+  <div class="challenge-question">
+    <p>{{ challenge.question }}</p>
+  </div>
+
+  <!-- Code Editor (for code challenges) -->
+  <div class="challenge-input" *ngIf="challenge.type === 'code'">
+    <label class="input-label">Your Solution:</label>
+    <textarea
+      class="code-editor"
+      [(ngModel)]="userAnswer"
+      [placeholder]="challenge.code_template || 'Write your code here...'"
+      [disabled]="isSubmitted"
+      rows="8"
+      id="code-editor-input"
+    ></textarea>
+  </div>
+
+  <!-- Math Input -->
+  <div class="challenge-input" *ngIf="challenge.type === 'math'">
+    <label class="input-label">
+      Your Answer
+      <span class="format-hint" *ngIf="challenge.expected_format">
+        ({{ challenge.expected_format }})
+      </span>
+    </label>
+    <input
+      type="text"
+      class="input-field math-input"
+      [(ngModel)]="userAnswer"
+      placeholder="Enter your answer..."
+      [disabled]="isSubmitted"
+      (keydown.enter)="submit()"
+      id="math-input"
+    />
+  </div>
+
+  <!-- Logic / MCQ Options -->
+  <div class="challenge-options" *ngIf="challenge.type === 'logic' && challenge.options">
+    <button
+      *ngFor="let option of challenge.options; let i = index"
+      class="option-btn"
+      [class.selected]="selectedOption === option"
+      [disabled]="isSubmitted"
+      (click)="selectOption(option)"
+      [id]="'option-' + i"
+    >
+      <span class="option-marker">{{ ['A', 'B', 'C', 'D'][i] }}</span>
+      <span class="option-text">{{ option }}</span>
+    </button>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="challenge-actions">
+    <button
+      class="btn btn-primary submit-challenge-btn"
+      (click)="submit()"
+      [disabled]="isSubmitted || !userAnswer.trim()"
+      id="submit-challenge"
+    >
+      <span *ngIf="!isSubmitted">Submit Answer</span>
+      <span *ngIf="isSubmitted">✓ Submitted</span>
+    </button>
+  </div>
+</div>

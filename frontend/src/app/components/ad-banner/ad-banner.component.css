@@ -1,0 +1,58 @@
+.ad-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-sm) 0;
+}
+
+.ad-placeholder {
+  text-align: center;
+  border: 1px dashed rgba(124, 92, 252, 0.15);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.ad-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  padding: 2px var(--space-sm);
+  background: rgba(15, 10, 30, 0.3);
+}
+
+.ad-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ad-dev-text {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  padding: var(--space-sm) var(--space-lg);
+}
+
+/* Ad Sizes */
+.ad-leaderboard .ad-placeholder {
+  width: 100%;
+  max-width: 728px;
+  min-height: 50px;
+}
+
+.ad-rectangle .ad-placeholder {
+  width: 300px;
+  min-height: 250px;
+}
+
+.ad-sidebar .ad-placeholder {
+  width: 160px;
+  min-height: 600px;
+}
+
+@media (max-width: 768px) {
+  .ad-leaderboard .ad-placeholder {
+    max-width: 320px;
+    min-height: 50px;
+  }
+}

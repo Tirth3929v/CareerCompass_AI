@@ -1,0 +1,45 @@
+<nav class="navbar" id="main-navbar">
+  <div class="navbar-inner">
+    <a routerLink="/" class="navbar-brand" id="nav-brand">
+      <span class="brand-icon">🧭</span>
+      <span class="brand-text">
+        <span class="brand-name">CareerCompass</span>
+        <span class="brand-badge">AI</span>
+      </span>
+    </a>
+
+    <div class="navbar-links">
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-link"
+        id="nav-link-chat"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span>Chat</span>
+      </a>
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        class="nav-link"
+        id="nav-link-dashboard"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        <span>Dashboard</span>
+      </a>
+    </div>
+
+    <div class="navbar-session">
+      <div class="session-dot"></div>
+      <span class="session-label">Session Active</span>
+    </div>
+  </div>
+</nav>
